@@ -1,16 +1,20 @@
 package se.ltu.d7002d.SimLG;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
 import java.util.TreeMap;
 
 // This class implements the simulation engine
-// As long as there are events in the queue, the simulaiton 
+// As long as there are events in the queue, the simulation 
 // will run. When empty, the engine stops
 
 public final class SimEngine implements Runnable {
 
 	private static SimEngine _instance;
 	public static double getTime() {
-		return _simTime;
+		BigDecimal time = new BigDecimal(_simTime);
+		int precision = 6;
+		return time.round(new MathContext(precision)).doubleValue();
 	}
 	private final TreeMap _simTimeTree = new TreeMap();
 	private boolean _quit = false;

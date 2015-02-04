@@ -21,4 +21,8 @@ public class NetworkAddr {
 	public int nodeId() {
 		return _nodeId;
 	}
+	
+	public String dotAddress() {
+		return _networkId + "." + _nodeId;
+	}
 }

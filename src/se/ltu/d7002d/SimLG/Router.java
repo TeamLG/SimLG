@@ -46,15 +46,12 @@ public class Router extends SimEnt {
 
 	public void recv(SimEnt source, Event event) {
 		if (event instanceof Message) {
-			System.out.println("Router handles packet with seq: "
-					+ ((Message) event).seq() + " from node: "
-					+ ((Message) event).source().networkId() + "."
-					+ ((Message) event).source().nodeId());
+			Utils.logMessage(((Message) event).source(),
+					((Message) event).destination(),
+					"Router receives and passes on packet with seq: "
+							+ ((Message) event).seq());
 			SimEnt sendNext = getInterface(((Message) event).destination()
 					.networkId());
-			System.out.println("Router sends to node: "
-					+ ((Message) event).destination().networkId() + "."
-					+ ((Message) event).destination().nodeId());
 			send(sendNext, event, _now);
 
 		}

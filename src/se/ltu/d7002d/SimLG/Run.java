@@ -5,8 +5,8 @@ package se.ltu.d7002d.SimLG;
 public class Run {
 	public static void main(String[] args) {
 		// Creates two links
-		Link link1 = new LossyLink(0.10f, 2, 1);
-		Link link2 = new LossyLink(0.10f, 2, 1);
+		Link link1 = new LossyLink(10, 2, 1);
+		Link link2 = new LossyLink(0.10, 2, 1);
 
 		// Create two end hosts that will be
 		// communicating via the router

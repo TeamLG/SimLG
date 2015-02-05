@@ -80,7 +80,7 @@ public class LossyLink extends Link {
 
 	private double getJitter() {
 		Random random = new Random();
-		return Math.abs(_maximumGaussianJitter * random.nextGaussian());
+		return _maximumGaussianJitter * random.nextGaussian();
 	}
 
 	public void recv(SimEnt src, Event ev) {
@@ -94,10 +94,11 @@ public class LossyLink extends Link {
 				Utils.logMessage(((Message) ev).source(),
 						((Message) ev).destination(),
 						"LossyLink recv msg, passes it through");
+				double delay = _packetDelay + getJitter();
 				if (src == _connectorA) {
-					send(_connectorB, ev, _now + _packetDelay + getJitter());
+					send(_connectorB, ev, _now + (delay >= 0 ? delay : 0));
 				} else {
-					send(_connectorA, ev, _now + _packetDelay + getJitter());
+					send(_connectorA, ev, _now + (delay >= 0 ? delay : 0));
 				}
 			}
 		}

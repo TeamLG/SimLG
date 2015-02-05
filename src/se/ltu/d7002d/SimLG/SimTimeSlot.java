@@ -4,7 +4,7 @@ package se.ltu.d7002d.SimLG;
 // In the case that two events are scheduled for the same time, the id of the entity 
 // are used to solve the conflict of who goes first. 
 
-class SimTimeSlot implements Comparable {
+class SimTimeSlot implements Comparable<Object> {
 	double _msek;
 	long _resolver;
 	private static long _discriminator = 0;

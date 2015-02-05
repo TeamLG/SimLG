@@ -16,7 +16,7 @@ public final class SimEngine implements Runnable {
 		int precision = 6;
 		return time.round(new MathContext(precision)).doubleValue();
 	}
-	private final TreeMap _simTimeTree = new TreeMap();
+	private final TreeMap<SimTimeSlot, EventHandle> _simTimeTree = new TreeMap<SimTimeSlot, EventHandle>();
 	private boolean _quit = false;
 
 	// This method is called to when scheduling an event for some target.

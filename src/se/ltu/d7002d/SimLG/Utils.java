@@ -6,7 +6,7 @@ public class Utils {
 		if (null != to) {
 			Object[] x = { new Double(SimEngine.getTime()), from.dotAddress(),
 					to.dotAddress() };
-			String tag = String.format("[%8.3f][%s→%s] ", x);
+			String tag = String.format("[%8.3f][%s->%s] ", x);
 			System.out.println(tag + message);
 		}
 	}

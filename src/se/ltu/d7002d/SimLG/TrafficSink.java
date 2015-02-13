@@ -17,13 +17,14 @@ public class TrafficSink extends Node {
 
 	/**
 	 * Creates an object with an number of sent packets by the sending node,time
-	 * and the number received packets
+	 * and the number received packets.
 	 * 
 	 * @param sentPackets
-	 *            Represents the number of sent packets
+	 *            Represents the number of sent packets.
 	 * @param receivedPackets
-	 *            Represents the number of received packets
-	 * 
+	 *            Represents the number of received packets.
+	 * @param time
+	 *            Represents time delay.
 	 * 
 	 */
 	public TrafficSink(int network, int node, int sentPackets,

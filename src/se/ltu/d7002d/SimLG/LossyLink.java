@@ -15,8 +15,9 @@ public class LossyLink extends Link {
 	private SimEnt _connectorB = null;
 	private int _now = 0;
 	private double _packetLossProbability = 0;
-	private double _maximumGaussianJitter = 0;
+	private double _standardDeviation = 0;
 	private double _packetDelay = 0;
+	private Random _random = null;
 
 	/**
 	 * Creates a LossyLink object with some probability of packet loss, a
@@ -24,12 +25,12 @@ public class LossyLink extends Link {
 	 * 
 	 * @param probability
 	 *            The probability of a packet being lost, from 0 to 1.
-	 * @param maxJitter
-	 *            The maximal jitter, in time units.
+	 * @param standardDeviation
+	 *            The standard deviation from the delay.
 	 * @param delay
 	 *            Constant delay, in time units.
 	 */
-	public LossyLink(double probability, double maxJitter, double delay) {
+	public LossyLink(double probability, double standardDeviation, double delay) {
 		super();
 		_packetLossProbability = probability;
 		if (_packetLossProbability < 0)
@@ -37,15 +38,13 @@ public class LossyLink extends Link {
 		else if (_packetLossProbability > 1)
 			_packetLossProbability = 1;
 		/*
-		 * Ensure that jitter and delay is positive, unless it's a time
-		 * traveling link.
+		 * Ensure that delay is positive, unless it's a time traveling link.
 		 */
-		_maximumGaussianJitter = maxJitter;
-		if (_maximumGaussianJitter < 0)
-			_maximumGaussianJitter = 0;
+		_standardDeviation = standardDeviation;
 		_packetDelay = delay;
 		if (_packetDelay < 0)
 			_packetDelay = 0;
+		_random = new Random();
 	}
 
 	/**
@@ -55,32 +54,25 @@ public class LossyLink extends Link {
 	 * @param tries
 	 *            The average number of tries necessary to incur one packet
 	 *            loss.
-	 * @param maxJitter
-	 *            The maximal jitter, in time units.
+	 * @param standardDeviation
+	 *            The standard deviation from the delay.
 	 * @param delay
 	 *            Constant delay, in time units.
 	 */
-	public LossyLink(int tries, double maxJitter, double delay) {
+	public LossyLink(int tries, double standardDeviation, double delay) {
 		super();
 		if (tries <= 0)
 			_packetLossProbability = 1;
 		else
 			_packetLossProbability = 1.0 / tries;
 		/*
-		 * Ensure that jitter and delay is positive, unless it's a time
-		 * traveling link.
+		 * Ensure that delay is positive, unless it's a time traveling link.
 		 */
-		_maximumGaussianJitter = maxJitter;
-		if (_maximumGaussianJitter < 0)
-			_maximumGaussianJitter = 0;
+		_standardDeviation = standardDeviation;
 		_packetDelay = delay;
 		if (_packetDelay < 0)
 			_packetDelay = 0;
-	}
-
-	private double getJitter() {
-		Random random = new Random();
-		return _maximumGaussianJitter * random.nextGaussian();
+		_random = new Random();
 	}
 
 	public void recv(SimEnt src, Event ev) {
@@ -94,7 +86,7 @@ public class LossyLink extends Link {
 				Utils.logMessage(((Message) ev).source(),
 						((Message) ev).destination(),
 						"LossyLink recv msg, passes it through");
-				double delay = _packetDelay + getJitter();
+				double delay = _packetDelay + _random.nextGaussian() * _standardDeviation;
 				if (src == _connectorA) {
 					send(_connectorB, ev, _now + (delay >= 0 ? delay : 0));
 				} else {

@@ -14,6 +14,7 @@ public abstract class TrafficGeneratorBase {
 	protected long _messageSequence = 0;
 	protected double _interstreamGap = 0.0;
 	protected double _intermessageGap = 5.0;
+	protected double _standardDeviationScale = 1.0;
 	protected int _numberOfMessagesSent = 0;
 	protected boolean _sending = false;
 	protected SimEnt _initialSender = null;

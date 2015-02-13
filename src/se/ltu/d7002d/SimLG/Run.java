@@ -10,8 +10,10 @@ public class Run {
 
 		// Create two end hosts that will be
 		// communicating via the router
-		Node host1 = new Node(1, 1);
-		Node host2 = new Node(2, 1);
+		NetworkAddr host1addr = new NetworkAddr(1, 1);
+		NetworkAddr host2addr = new NetworkAddr(2, 2);
+		Node host1 = new Node(host1addr, null);
+		Node host2 = new Node(host2addr, null);
 
 		// Connect links to hosts
 		host1.setPeer(link1);
@@ -29,10 +31,12 @@ public class Run {
 		// Generate some traffic
 		// host1 will send 3 messages with time interval 5 to network 2, node 1.
 		// Sequence starts with number 1
-		host1.StartSending(2, 2, 3, 5, 1);
+		host1.setTrafficGenerator(new TrafficGeneratorCBR(3, 5, 1));
+		host1.startSending(host2addr);
 		// host2 will send 2 messages with time interval 10 to network 1, node
 		// 1. Sequence starts with number 10
-		host2.StartSending(1, 1, 2, 10, 10);
+		host2.setTrafficGenerator(new TrafficGeneratorCBR(2, 10, 10));
+		host2.startSending(host1addr);
 
 		// Start the simulation engine and of we go!
 		Thread t = new Thread(SimEngine.instance());

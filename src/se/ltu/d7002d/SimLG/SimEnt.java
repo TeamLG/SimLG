@@ -42,4 +42,10 @@ public abstract class SimEnt {
 				delayExecution);
 	}
 
+	protected final EventHandle send(SimEnt source, SimEnt destination, Event event,
+			double delayExecution) {
+		return SimEngine.instance().register(source, destination, event,
+				delayExecution);
+	}
+
 }

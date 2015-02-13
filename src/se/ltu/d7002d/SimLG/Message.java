@@ -7,12 +7,12 @@ package se.ltu.d7002d.SimLG;
 public class Message implements Event {
 	private NetworkAddr _source;
 	private NetworkAddr _destination;
-	private int _seq = 0;
+	private long _seq = 0;
 
-	Message(NetworkAddr from, NetworkAddr to, int seq) {
+	Message(NetworkAddr from, NetworkAddr to, long _messageSequence) {
 		_source = from;
 		_destination = to;
-		_seq = seq;
+		_seq = _messageSequence;
 	}
 
 	public NetworkAddr destination() {
@@ -22,7 +22,7 @@ public class Message implements Event {
 	public void entering(SimEnt locale) {
 	}
 
-	public int seq() {
+	public long seq() {
 		return _seq;
 	}
 

@@ -4,10 +4,12 @@ package se.ltu.d7002d.SimLG;
 // and it count messages send and received.
 
 public class Node extends SimEnt {
+
 	private NetworkAddr _id;
 	private SimEnt _peer;
 	private int _sentmsg = 0;
 	private int _seq = 0;
+	private TrafficSink trafficSink;
 
 	private int _stopSendingAfter = 0; // messages
 
@@ -23,19 +25,26 @@ public class Node extends SimEnt {
 
 	private int _toHost = 0;
 
-	public Node(int network, int node) {
+	public Node(int network, int node){
 		super();
 		_id = new NetworkAddr(network, node);
+		trafficSink = new TrafficSink();
 	}
 
-	public NetworkAddr getAddr() {
+	public NetworkAddr getAddr(){
 		return _id;
 	}
 
-	public void recv(SimEnt src, Event ev) {
+	public TrafficSink getTrafficSink(){
+		return trafficSink;
+	}
+
+	public void recv(SimEnt src, Event ev){
 		if (ev instanceof TimerEvent) {
 			if (_stopSendingAfter > _sentmsg) {
+
 				_sentmsg++;
+
 				NetworkAddr source = new NetworkAddr(_id.networkId(),
 						_id.nodeId());
 				NetworkAddr destination = new NetworkAddr(_toNetwork, _toHost);
@@ -45,15 +54,19 @@ public class Node extends SimEnt {
 						"Node " + source.dotAddress()
 								+ " sent message with seq: " + _seq);
 				_seq++;
+				trafficSink.getsentMsgs();
 			}
 		}
-		if (ev instanceof Message) {
+		if (ev instanceof Message){
+			trafficSink.countMessage();
+			trafficSink.getTime();
 			Utils.logMessage(
 					((Message) ev).source(),
 					((Message) ev).destination(),
 					"Node " + _id.networkId() + "." + _id.nodeId()
 							+ " receives message with seq: "
 							+ ((Message) ev).seq());
+
 		}
 	}
 
@@ -70,7 +83,7 @@ public class Node extends SimEnt {
 	// This method is called upon that an event destined for this node triggers.
 
 	public void StartSending(int network, int node, int number,
-			int timeInterval, int startSeq) {
+			int timeInterval, int startSeq){
 		_stopSendingAfter = number;
 		_timeBetweenSending = timeInterval;
 		_toNetwork = network;
